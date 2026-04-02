@@ -33,11 +33,13 @@ install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/MujocoTactileSensorPlugin
 add_custom_command(
   TARGET TactileSensor
   POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/mujoco_plugin
   COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:TactileSensor>
-          ${MUJOCO_BIN_DIR}/mujoco_plugin)
+          ${CMAKE_BINARY_DIR}/mujoco_plugin)
 
 add_custom_command(
   TARGET TactileSensorPlugin
   POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/mujoco_plugin
   COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:TactileSensorPlugin>
-          ${MUJOCO_BIN_DIR}/mujoco_plugin)
+          ${CMAKE_BINARY_DIR}/mujoco_plugin)

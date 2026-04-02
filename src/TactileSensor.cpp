@@ -275,7 +275,7 @@ void TactileSensor::compute(const mjModel * m, mjData * d, int // plugin_id
 
     mjtNum contact_pos[3]; // Contact position in the site frame
     mju_sub3(contact_pos, d->contact[contact_idx].pos, site_pos);
-    mju_rotVecMatT(contact_pos, contact_pos, site_mat);
+    mju_mulMatTVec3(contact_pos, site_mat, contact_pos);
 
     int sensor_idx_min = 0;
     mjtNum dist_min = 1e10;
@@ -293,8 +293,8 @@ void TactileSensor::compute(const mjModel * m, mjData * d, int // plugin_id
     {
       mjtNum force[6]; // Contact force in the site frame (the three elements behind are not processed)
       mj_contactForce(m, d, contact_idx, force);
-      mju_rotVecMatT(force, force, d->contact[contact_idx].frame);
-      mju_rotVecMatT(force, force, site_mat);
+      mju_mulMatTVec3(force, d->contact[contact_idx].frame, force);
+      mju_mulMatTVec3(force, site_mat, force);
 
       // Reverse the force direction so that the force is toward the site body
       if(site_body_weldid == contact_bodyid1)
@@ -345,7 +345,7 @@ void TactileSensor::visualize(const mjModel * m,
   {
     mjtNum sensor_pos_world[3];
     mjtNum * sensor_pos = sensor_pos_list_ + 3 * sensor_idx;
-    mju_rotVecMat(sensor_pos_world, sensor_pos, site_mat);
+    mju_mulMatVec3(sensor_pos_world, site_mat, sensor_pos);
     mju_addTo3(sensor_pos_world, site_pos);
 
     mjtNum sensor_mat_world[9];
